@@ -3,6 +3,9 @@ from loguru import logger
 from etl.config import DATE_RANGE_START, DATE_RANGE_END
 
 
+PANDAS_MAX_SAFE_DATE = pd.Timestamp('2262-04-11')
+
+
 def build_dim_date() -> pd.DataFrame:
     """
     Génère la dimension calendrier complète.
@@ -27,10 +30,10 @@ def build_dim_date() -> pd.DataFrame:
 
     # Ligne sentinelle
     sentinel = pd.DataFrame([{
-        'date_key': -1, 'full_date': pd.Timestamp('9999-12-31'),
+        'date_key': -1, 'full_date': PANDAS_MAX_SAFE_DATE,
         'day_num': 31, 'day_name': 'N/A', 'week_num': 53,
         'month_num': 12, 'month_name': 'N/A', 'quarter': 'Q4',
-        'year': 9999, 'is_weekend': False, 'fiscal_quarter': 'Q4'
+        'year': 2262, 'is_weekend': False, 'fiscal_quarter': 'Q4'
     }])
 
     dim = pd.concat([sentinel, df], ignore_index=True)

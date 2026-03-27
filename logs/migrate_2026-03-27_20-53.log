@@ -1,0 +1,52 @@
+2026-03-27 20:53:47.449 | INFO     | __main__:<module>:59 - =======================================================
+2026-03-27 20:53:47.450 | INFO     | __main__:<module>:60 -   Data Warehouse Migration
+2026-03-27 20:53:47.451 | INFO     | __main__:<module>:61 - =======================================================
+2026-03-27 20:53:47.537 | INFO     | __main__:run_migrations:27 - Running migration: 001_create_schema.sql
+2026-03-27 20:53:47.539 | ERROR    | __main__:run_migrations:39 -   Failed: (psycopg2.ProgrammingError) can't execute an empty query
+[SQL: -- -- Migration: Create Data Warehouse Schema
+-- -- Date: 2026-03-27
+-- -- Description: Creates all dimension and fact tables for HR attrition data warehouse
+
+-- -- ================================================================
+-- -- DIMENSIONS
+-- -- ================================================================
+
+-- -- dim_date: Calendar dimension with sentinel row (-1) for NULL dates
+-- CREATE TABLE IF NOT EXISTS dim_date (
+--     date_key                INTEGER PRIMARY KEY,
+--     full_date               DATE NOT NULL,
+--     day_num                 SMALLINT NOT NULL,
+--     day_name                VARCHAR(20),
+--     week_num                SMALLINT,
+--     month_num               SMALLINT NOT NULL,
+--     month_name              VARCHAR(20),
+--     quarter                 VARCHAR(3),
+--     year                    SMALLINT NOT NULL,
+--     is_weekend              BOOLEAN,
+--     fiscal_quarter          VARCHAR(3)
+-- )]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-27 20:53:47.581 | ERROR    | __main__:run_migrations:47 - Migration failed: (psycopg2.ProgrammingError) can't execute an empty query
+[SQL: -- -- Migration: Create Data Warehouse Schema
+-- -- Date: 2026-03-27
+-- -- Description: Creates all dimension and fact tables for HR attrition data warehouse
+
+-- -- ================================================================
+-- -- DIMENSIONS
+-- -- ================================================================
+
+-- -- dim_date: Calendar dimension with sentinel row (-1) for NULL dates
+-- CREATE TABLE IF NOT EXISTS dim_date (
+--     date_key                INTEGER PRIMARY KEY,
+--     full_date               DATE NOT NULL,
+--     day_num                 SMALLINT NOT NULL,
+--     day_name                VARCHAR(20),
+--     week_num                SMALLINT,
+--     month_num               SMALLINT NOT NULL,
+--     month_name              VARCHAR(20),
+--     quarter                 VARCHAR(3),
+--     year                    SMALLINT NOT NULL,
+--     is_weekend              BOOLEAN,
+--     fiscal_quarter          VARCHAR(3)
+-- )]
+(Background on this error at: https://sqlalche.me/e/20/f405)

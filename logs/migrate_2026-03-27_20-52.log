@@ -1,0 +1,33 @@
+2026-03-27 20:52:13.802 | INFO     | __main__:<module>:59 - =======================================================
+2026-03-27 20:52:13.803 | INFO     | __main__:<module>:60 -   Data Warehouse Migration
+2026-03-27 20:52:13.804 | INFO     | __main__:<module>:61 - =======================================================
+2026-03-27 20:52:13.894 | INFO     | __main__:run_migrations:27 - Running migration: 001_create_schema.sql
+2026-03-27 20:52:13.896 | DEBUG    | __main__:run_migrations:37 -   Executed: -- Migration: Create Data Warehouse Schema
+-- Date: 2026-03-...
+2026-03-27 20:52:13.897 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_recruitment: Recruitment source dimension
+CREATE TABL...
+2026-03-27 20:52:13.899 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_termination: Termination reason dimension
+CREATE TABL...
+2026-03-27 20:52:13.900 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_manager: Manager dimension with sentinel row (-1) for...
+2026-03-27 20:52:13.901 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_performance: Performance score dimension (static refe...
+2026-03-27 20:52:13.902 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_job: Job/Position dimension
+CREATE TABLE IF NOT EXIST...
+2026-03-27 20:52:13.902 | DEBUG    | __main__:run_migrations:37 -   Executed: -- dim_employee: Employee dimension
+CREATE TABLE IF NOT EXIS...
+2026-03-27 20:52:13.903 | DEBUG    | __main__:run_migrations:37 -   Executed: -- =========================================================...
+2026-03-27 20:52:13.905 | ERROR    | __main__:run_migrations:39 -   Failed: (psycopg2.errors.DuplicateTable) relation "idx_fact_employee_key" already exists
+
+[SQL: -- ================================================================
+-- INDEXES (optional, for performance)
+-- ================================================================
+
+CREATE INDEX idx_fact_employee_key ON fact_employee_attrition(employee_key)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-27 20:52:13.905 | ERROR    | __main__:run_migrations:47 - Migration failed: (psycopg2.errors.DuplicateTable) relation "idx_fact_employee_key" already exists
+
+[SQL: -- ================================================================
+-- INDEXES (optional, for performance)
+-- ================================================================
+
+CREATE INDEX idx_fact_employee_key ON fact_employee_attrition(employee_key)]
+(Background on this error at: https://sqlalche.me/e/20/f405)

@@ -1,0 +1,42 @@
+2026-03-27 20:35:36.854 | INFO     | __main__:<module>:26 - =======================================================
+2026-03-27 20:35:36.856 | INFO     | __main__:<module>:27 -   ETL HRDataset v14 — démarrage
+2026-03-27 20:35:36.857 | INFO     | __main__:<module>:28 - =======================================================
+2026-03-27 20:35:36.857 | INFO     | __main__:<module>:31 - ── ÉTAPE 1 : Extraction ──
+2026-03-27 20:35:36.858 | INFO     | etl.extract:extract:21 - Lecture du fichier : data/raw/HRDataset_v14.csv
+2026-03-27 20:35:36.872 | DEBUG    | etl.extract:extract:26 - Fichier lu : 311 lignes brutes
+2026-03-27 20:35:36.873 | SUCCESS  | etl.extract:extract:42 - Toutes les colonnes attendues sont présentes (36)
+2026-03-27 20:35:36.888 | DEBUG    | etl.extract:extract:57 - Nettoyage des chaînes terminé
+2026-03-27 20:35:36.914 | DEBUG    | etl.extract:extract:73 - Conversion des dates terminée
+2026-03-27 20:35:36.916 | SUCCESS  | etl.extract:extract:106 - Extraction OK — 311 lignes, 36 colonnes
+2026-03-27 20:35:36.917 | INFO     | etl.extract:extract:107 -   DateofHire     : 2006-01-09 → 2018-07-09
+2026-03-27 20:35:36.917 | INFO     | etl.extract:extract:108 -   Termd=1 (partis)  : 104
+2026-03-27 20:35:36.918 | INFO     | etl.extract:extract:109 -   Termd=0 (actifs)  : 207
+2026-03-27 20:35:36.918 | INFO     | etl.extract:extract:110 -   ManagerID nulls   : 8
+2026-03-27 20:35:36.919 | INFO     | etl.extract:extract:111 -   DateofTermination nulls : 207
+2026-03-27 20:35:36.919 | INFO     | __main__:<module>:35 - ── ÉTAPE 2 : Transformation des dimensions ──
+2026-03-27 20:35:36.920 | INFO     | etl.dim_date:build_dim_date:12 - Génération dim_date : 1960-01-01 → 2030-12-31
+2026-03-27 20:35:37.130 | SUCCESS  | etl.dim_date:build_dim_date:37 - dim_date — 25,934 lignes générées (dont sentinelle -1)
+2026-03-27 20:35:37.135 | SUCCESS  | etl.transform:build_dim_employee:103 - dim_employee — 311 lignes
+2026-03-27 20:35:37.138 | SUCCESS  | etl.transform:build_dim_job:150 - dim_job — 56 lignes
+2026-03-27 20:35:37.144 | SUCCESS  | etl.transform:build_dim_manager:191 - dim_manager — 24 lignes (dont sentinelle -1)
+2026-03-27 20:35:37.145 | SUCCESS  | etl.transform:build_dim_recruitment:218 - dim_recruitment — 9 lignes
+2026-03-27 20:35:37.146 | WARNING  | etl.transform:build_dim_termination:252 - Raisons non mappées dans TERMINATION_MAP (fallback appliqué) : ['Fatal attraction', 'Learned that he is a gangster']
+2026-03-27 20:35:37.147 | SUCCESS  | etl.transform:build_dim_termination:260 - dim_termination — 18 lignes
+2026-03-27 20:35:37.148 | INFO     | __main__:<module>:45 - ── ÉTAPE 3 : Construction de la table de faits ──
+2026-03-27 20:35:37.149 | INFO     | etl.transform:build_fact:296 - Snapshot date utilisée pour les calculs : 2026-03-27
+2026-03-27 20:35:37.152 | DEBUG    | etl.transform:build_fact:308 - Mesures calculées (attrition_flag, tenure_days, days_since_last_review)
+2026-03-27 20:35:37.163 | DEBUG    | etl.transform:build_fact:321 - Clés dates générées
+2026-03-27 20:35:37.181 | DEBUG    | etl.transform:build_fact:376 - Jointures avec toutes les dimensions effectuées
+2026-03-27 20:35:37.183 | SUCCESS  | etl.transform:build_fact:394 - Toutes les FK sont résolues — aucun null détecté
+2026-03-27 20:35:37.186 | SUCCESS  | etl.transform:build_fact:434 - fact_employee_attrition — 311 lignes
+2026-03-27 20:35:37.187 | INFO     | etl.transform:build_fact:435 -   Attrition flag=1  : 104
+2026-03-27 20:35:37.188 | INFO     | etl.transform:build_fact:436 -   Actifs flag=0     : 207
+2026-03-27 20:35:37.188 | INFO     | etl.transform:build_fact:437 -   Tenure moyen (partis) : 1264 jours
+2026-03-27 20:35:37.189 | INFO     | etl.transform:build_fact:439 -   Salaire moyen     : 69,021 $/an
+2026-03-27 20:35:37.189 | INFO     | __main__:<module>:53 - ── ÉTAPE 4 : Chargement PostgreSQL ──
+2026-03-27 20:35:37.302 | INFO     | etl.load:load_all:33 - Nettoyage des tables (TRUNCATE CASCADE)...
+2026-03-27 20:35:37.308 | ERROR    | etl.load:load_all:63 - Erreur lors du chargement : (psycopg2.errors.UndefinedTable) relation "fact_employee_attrition" does not exist
+
+[SQL: TRUNCATE TABLE fact_employee_attrition CASCADE]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-27 20:35:37.309 | INFO     | etl.load:load_all:69 - Connexion fermée.

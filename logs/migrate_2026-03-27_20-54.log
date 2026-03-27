@@ -1,0 +1,7 @@
+2026-03-27 20:54:20.450 | INFO     | __main__:<module>:59 - =======================================================
+2026-03-27 20:54:20.452 | INFO     | __main__:<module>:60 -   Data Warehouse Migration
+2026-03-27 20:54:20.452 | INFO     | __main__:<module>:61 - =======================================================
+2026-03-27 20:54:20.541 | INFO     | __main__:run_migrations:27 - Running migration: 002_add_fact_key.sql
+2026-03-27 20:54:20.631 | DEBUG    | __main__:run_migrations:37 -   Executed: -- Migration: Add fact_key primary key to fact_employee_attr...
+2026-03-27 20:54:20.631 | SUCCESS  | __main__:run_migrations:42 -   Migration 002_add_fact_key.sql completed
+2026-03-27 20:54:20.645 | SUCCESS  | __main__:run_migrations:44 - All migrations completed successfully!

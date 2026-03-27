@@ -1,0 +1,104 @@
+2026-03-27 20:50:15.659 | INFO     | __main__:<module>:26 - =======================================================
+2026-03-27 20:50:15.660 | INFO     | __main__:<module>:27 -   ETL HRDataset v14 — démarrage
+2026-03-27 20:50:15.661 | INFO     | __main__:<module>:28 - =======================================================
+2026-03-27 20:50:15.661 | INFO     | __main__:<module>:31 - ── ÉTAPE 1 : Extraction ──
+2026-03-27 20:50:15.662 | INFO     | etl.extract:extract:21 - Lecture du fichier : data/raw/HRDataset_v14.csv
+2026-03-27 20:50:15.669 | DEBUG    | etl.extract:extract:26 - Fichier lu : 311 lignes brutes
+2026-03-27 20:50:15.669 | SUCCESS  | etl.extract:extract:42 - Toutes les colonnes attendues sont présentes (36)
+2026-03-27 20:50:15.678 | DEBUG    | etl.extract:extract:57 - Nettoyage des chaînes terminé
+2026-03-27 20:50:15.699 | DEBUG    | etl.extract:extract:73 - Conversion des dates terminée
+2026-03-27 20:50:15.701 | SUCCESS  | etl.extract:extract:106 - Extraction OK — 311 lignes, 36 colonnes
+2026-03-27 20:50:15.702 | INFO     | etl.extract:extract:107 -   DateofHire     : 2006-01-09 → 2018-07-09
+2026-03-27 20:50:15.702 | INFO     | etl.extract:extract:108 -   Termd=1 (partis)  : 104
+2026-03-27 20:50:15.703 | INFO     | etl.extract:extract:109 -   Termd=0 (actifs)  : 207
+2026-03-27 20:50:15.703 | INFO     | etl.extract:extract:110 -   ManagerID nulls   : 8
+2026-03-27 20:50:15.704 | INFO     | etl.extract:extract:111 -   DateofTermination nulls : 207
+2026-03-27 20:50:15.704 | INFO     | __main__:<module>:35 - ── ÉTAPE 2 : Transformation des dimensions ──
+2026-03-27 20:50:15.705 | INFO     | etl.dim_date:build_dim_date:12 - Génération dim_date : 1960-01-01 → 2030-12-31
+2026-03-27 20:50:15.938 | SUCCESS  | etl.dim_date:build_dim_date:37 - dim_date — 25,934 lignes générées (dont sentinelle -1)
+2026-03-27 20:50:15.942 | SUCCESS  | etl.transform:build_dim_employee:103 - dim_employee — 311 lignes
+2026-03-27 20:50:15.946 | SUCCESS  | etl.transform:build_dim_job:150 - dim_job — 56 lignes
+2026-03-27 20:50:15.949 | SUCCESS  | etl.transform:build_dim_manager:191 - dim_manager — 24 lignes (dont sentinelle -1)
+2026-03-27 20:50:15.950 | SUCCESS  | etl.transform:build_dim_recruitment:218 - dim_recruitment — 9 lignes
+2026-03-27 20:50:15.951 | WARNING  | etl.transform:build_dim_termination:252 - Raisons non mappées dans TERMINATION_MAP (fallback appliqué) : ['Fatal attraction', 'Learned that he is a gangster']
+2026-03-27 20:50:15.952 | SUCCESS  | etl.transform:build_dim_termination:260 - dim_termination — 18 lignes
+2026-03-27 20:50:15.952 | INFO     | __main__:<module>:45 - ── ÉTAPE 3 : Construction de la table de faits ──
+2026-03-27 20:50:15.952 | INFO     | etl.transform:build_fact:296 - Snapshot date utilisée pour les calculs : 2026-03-27
+2026-03-27 20:50:15.955 | DEBUG    | etl.transform:build_fact:308 - Mesures calculées (attrition_flag, tenure_days, days_since_last_review)
+2026-03-27 20:50:15.962 | DEBUG    | etl.transform:build_fact:321 - Clés dates générées
+2026-03-27 20:50:15.976 | DEBUG    | etl.transform:build_fact:376 - Jointures avec toutes les dimensions effectuées
+2026-03-27 20:50:15.977 | SUCCESS  | etl.transform:build_fact:394 - Toutes les FK sont résolues — aucun null détecté
+2026-03-27 20:50:15.980 | SUCCESS  | etl.transform:build_fact:434 - fact_employee_attrition — 311 lignes
+2026-03-27 20:50:15.980 | INFO     | etl.transform:build_fact:435 -   Attrition flag=1  : 104
+2026-03-27 20:50:15.981 | INFO     | etl.transform:build_fact:436 -   Actifs flag=0     : 207
+2026-03-27 20:50:15.981 | INFO     | etl.transform:build_fact:437 -   Tenure moyen (partis) : 1264 jours
+2026-03-27 20:50:15.982 | INFO     | etl.transform:build_fact:439 -   Salaire moyen     : 69,021 $/an
+2026-03-27 20:50:15.982 | INFO     | __main__:<module>:53 - ── ÉTAPE 4 : Chargement PostgreSQL ──
+2026-03-27 20:50:16.071 | INFO     | etl.load:load_all:33 - Nettoyage des tables (TRUNCATE CASCADE)...
+2026-03-27 20:50:16.136 | INFO     | etl.load:load_all:40 - Chargement des tables...
+2026-03-27 20:50:17.671 | SUCCESS  | etl.load:load_all:57 -   dim_date                              25934 lignes (1.53s)
+2026-03-27 20:50:17.678 | SUCCESS  | etl.load:load_all:57 -   dim_recruitment                           9 lignes (0.01s)
+2026-03-27 20:50:17.685 | SUCCESS  | etl.load:load_all:57 -   dim_termination                          18 lignes (0.01s)
+2026-03-27 20:50:17.691 | SUCCESS  | etl.load:load_all:57 -   dim_manager                              24 lignes (0.01s)
+2026-03-27 20:50:17.696 | SUCCESS  | etl.load:load_all:57 -   dim_performance                           4 lignes (0.01s)
+2026-03-27 20:50:17.706 | SUCCESS  | etl.load:load_all:57 -   dim_job                                  56 lignes (0.01s)
+2026-03-27 20:50:17.739 | SUCCESS  | etl.load:load_all:57 -   dim_employee                            311 lignes (0.03s)
+2026-03-27 20:50:17.797 | SUCCESS  | etl.load:load_all:57 -   fact_employee_attrition                 311 lignes (0.06s)
+2026-03-27 20:50:17.811 | SUCCESS  | etl.load:load_all:60 - Chargement terminé en 1.78 secondes.
+2026-03-27 20:50:17.812 | INFO     | etl.load:load_all:69 - Connexion fermée.
+2026-03-27 20:50:17.812 | INFO     | __main__:<module>:67 - ── ÉTAPE 5 : Vérification et qualité des données ──
+2026-03-27 20:50:17.867 | INFO     | etl.load:verify:131 - 
+──────────────────────────────────────────────────
+Vue d'ensemble
+ total_employes  nb_departs  taux_attrition_pct  salaire_moyen  engagement_moyen  absences_moyennes
+            311         104                33.4        69021.0              4.11               10.2
+2026-03-27 20:50:17.873 | INFO     | etl.load:verify:131 - 
+──────────────────────────────────────────────────
+Attrition par département
+          department  total  departs  taux_pct
+          Production    209       83      39.7
+Software Engineering     11        4      36.4
+       Admin Offices      9        2      22.2
+               IT/IS     50       10      20.0
+               Sales     31        5      16.1
+    Executive Office      1        0       0.0
+2026-03-27 20:50:17.878 | INFO     | etl.load:verify:131 - 
+──────────────────────────────────────────────────
+Départs par année
+ year  nb_departs
+ 2010           1
+ 2011           3
+ 2012           8
+ 2013          13
+ 2014          13
+ 2015          23
+ 2016          22
+ 2017           8
+ 2018          13
+2026-03-27 20:50:17.883 | INFO     | etl.load:verify:131 - 
+──────────────────────────────────────────────────
+Attrition par source recrutement
+     recruitment_source source_category  total  departs  taux_pct
+On-line Web application         Digital      1        1     100.0
+          Google Search         Digital     49       30      61.2
+     Diversity Job Fair           Event     29       16      55.2
+                  Other          Direct      2        1      50.0
+          CareerBuilder         Digital     23       11      47.8
+                 Indeed         Digital     87       21      24.1
+               LinkedIn         Digital     76       18      23.7
+      Employee Referral        Referral     31        5      16.1
+                Website         Digital     13        1       7.7
+2026-03-27 20:50:17.886 | INFO     | etl.load:verify:131 - 
+──────────────────────────────────────────────────
+Role-playing dim_date — intégrité
+ hire_nulls  depart_nulls  review_nulls
+          0           207             0
+2026-03-27 20:50:17.887 | INFO     | etl.quality:run_all_quality_checks:53 - Début des contrôles de qualité post‑chargement
+2026-03-27 20:50:17.891 | INFO     | etl.quality:check_row_count:10 - dim_date: 25934 lignes
+2026-03-27 20:50:17.894 | INFO     | etl.quality:check_row_count:10 - dim_employee: 311 lignes
+2026-03-27 20:50:17.894 | INFO     | etl.quality:check_row_count:10 - dim_job: 56 lignes
+2026-03-27 20:50:17.896 | INFO     | etl.quality:check_row_count:10 - dim_manager: 24 lignes
+2026-03-27 20:50:17.897 | INFO     | etl.quality:check_row_count:10 - dim_recruitment: 9 lignes
+2026-03-27 20:50:17.900 | INFO     | etl.quality:check_row_count:10 - dim_termination: 18 lignes
+2026-03-27 20:50:17.902 | INFO     | etl.quality:check_row_count:10 - dim_performance: 4 lignes
+2026-03-27 20:50:17.902 | INFO     | etl.quality:check_row_count:10 - fact_employee_attrition: 311 lignes

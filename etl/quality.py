@@ -2,6 +2,23 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from loguru import logger
 
+
+def column_exists(engine, table_name: str, column_name: str) -> bool:
+    """Vérifie la présence d'une colonne dans une table PostgreSQL."""
+    sql = text("""
+        SELECT 1
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+          AND table_name = :table_name
+          AND column_name = :column_name
+        LIMIT 1
+    """)
+    with engine.connect() as conn:
+        return conn.execute(sql, {
+            'table_name': table_name,
+            'column_name': column_name,
+        }).scalar() is not None
+
 def check_row_count(engine, table_name: str, expected_min: int = 0, expected_max: int = None):
     """Vérifie que le nombre de lignes dans une table est dans une fourchette."""
     with engine.connect() as conn:
@@ -69,7 +86,13 @@ def run_all_quality_checks(engine):
     check_duplicate_keys(engine, 'dim_recruitment', 'recruitment_key')
     check_duplicate_keys(engine, 'dim_termination', 'termination_key')
     check_duplicate_keys(engine, 'dim_performance', 'performance_key')
-    check_duplicate_keys(engine, 'fact_employee_attrition', 'fact_key')
+    if column_exists(engine, 'fact_employee_attrition', 'fact_key'):
+        check_duplicate_keys(engine, 'fact_employee_attrition', 'fact_key')
+    else:
+        logger.warning(
+            "fact_employee_attrition.fact_key absent — contrôle de doublons fact_key ignoré "
+            "(migration non appliquée ?)"
+        )
 
     # Vérification des FK
     fk_checks = {
